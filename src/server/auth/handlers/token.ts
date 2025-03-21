@@ -89,10 +89,7 @@ export function tokenHandler({ provider, rateLimit: rateLimitConfig }: TokenHand
           const { code, code_verifier } = parseResult.data;
 
           // Verify PKCE challenge
-          // const codeChallenge = await provider.challengeForAuthorizationCode(client, code);
-          // if (!(await verifyChallenge(code_verifier, codeChallenge))) {
-          //   throw new InvalidGrantError("code_verifier does not match the challenge");
-          // }
+          throw new Error("Not implemented");
 
           const tokens = await provider.exchangeAuthorizationCode(client, code);
           res.status(200).json(tokens);
