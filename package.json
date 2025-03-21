@@ -1,5 +1,5 @@
 {
-  "name": "@modelcontextprotocol/sdk",
+  "name": "@msfeldstein/mcp-cjs",
   "version": "1.7.0",
   "description": "Model Context Protocol implementation for TypeScript",
   "license": "MIT",
