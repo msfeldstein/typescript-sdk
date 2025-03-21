@@ -10,7 +10,8 @@ import {
   UnsupportedGrantTypeError,
   ServerError,
   TooManyRequestsError,
-  OAuthError
+  OAuthError,
+  InvalidGrantError
 } from "../errors.js";
 
 export type TokenHandlerOptions = {
@@ -86,14 +87,8 @@ export function tokenHandler({ provider, rateLimit: rateLimitConfig }: TokenHand
             throw new InvalidRequestError(parseResult.error.message);
           }
 
-          const { code, code_verifier } = parseResult.data;
-
           // Verify PKCE challenge
-          throw new Error("Not implemented");
-
-          const tokens = await provider.exchangeAuthorizationCode(client, code);
-          res.status(200).json(tokens);
-          break;
+            throw new InvalidGrantError("code_verifier does not match the challenge");
         }
 
         case "refresh_token": {
