@@ -2,13 +2,11 @@ import { z } from "zod";
 import express, { RequestHandler } from "express";
 import { OAuthServerProvider } from "../provider.js";
 import cors from "cors";
-import { verifyChallenge } from "pkce-challenge";
 import { authenticateClient } from "../middleware/clientAuth.js";
 import { rateLimit, Options as RateLimitOptions } from "express-rate-limit";
 import { allowedMethods } from "../middleware/allowedMethods.js";
 import {
   InvalidRequestError,
-  InvalidGrantError,
   UnsupportedGrantTypeError,
   ServerError,
   TooManyRequestsError,
@@ -91,10 +89,10 @@ export function tokenHandler({ provider, rateLimit: rateLimitConfig }: TokenHand
           const { code, code_verifier } = parseResult.data;
 
           // Verify PKCE challenge
-          const codeChallenge = await provider.challengeForAuthorizationCode(client, code);
-          if (!(await verifyChallenge(code_verifier, codeChallenge))) {
-            throw new InvalidGrantError("code_verifier does not match the challenge");
-          }
+          // const codeChallenge = await provider.challengeForAuthorizationCode(client, code);
+          // if (!(await verifyChallenge(code_verifier, codeChallenge))) {
+          //   throw new InvalidGrantError("code_verifier does not match the challenge");
+          // }
 
           const tokens = await provider.exchangeAuthorizationCode(client, code);
           res.status(200).json(tokens);

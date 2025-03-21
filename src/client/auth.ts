@@ -1,4 +1,3 @@
-import pkceChallenge from "pkce-challenge";
 import { LATEST_PROTOCOL_VERSION } from "../types.js";
 import type { OAuthClientMetadata, OAuthClientInformation, OAuthTokens, OAuthMetadata, OAuthClientInformationFull } from "../shared/auth.js";
 import { OAuthClientInformationFullSchema, OAuthMetadataSchema, OAuthTokensSchema } from "../shared/auth.js";
@@ -207,46 +206,7 @@ export async function startAuthorization(
     redirectUrl: string | URL;
   },
 ): Promise<{ authorizationUrl: URL; codeVerifier: string }> {
-  const responseType = "code";
-  const codeChallengeMethod = "S256";
-
-  let authorizationUrl: URL;
-  if (metadata) {
-    authorizationUrl = new URL(metadata.authorization_endpoint);
-
-    if (!metadata.response_types_supported.includes(responseType)) {
-      throw new Error(
-        `Incompatible auth server: does not support response type ${responseType}`,
-      );
-    }
-
-    if (
-      !metadata.code_challenge_methods_supported ||
-      !metadata.code_challenge_methods_supported.includes(codeChallengeMethod)
-    ) {
-      throw new Error(
-        `Incompatible auth server: does not support code challenge method ${codeChallengeMethod}`,
-      );
-    }
-  } else {
-    authorizationUrl = new URL("/authorize", serverUrl);
-  }
-
-  // Generate PKCE challenge
-  const challenge = await pkceChallenge();
-  const codeVerifier = challenge.code_verifier;
-  const codeChallenge = challenge.code_challenge;
-
-  authorizationUrl.searchParams.set("response_type", responseType);
-  authorizationUrl.searchParams.set("client_id", clientInformation.client_id);
-  authorizationUrl.searchParams.set("code_challenge", codeChallenge);
-  authorizationUrl.searchParams.set(
-    "code_challenge_method",
-    codeChallengeMethod,
-  );
-  authorizationUrl.searchParams.set("redirect_uri", String(redirectUrl));
-
-  return { authorizationUrl, codeVerifier };
+  throw new Error("Not implemented");
 }
 
 /**
