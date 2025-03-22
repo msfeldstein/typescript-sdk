@@ -1,9 +1,10 @@
-import { ChildProcess, IOType, spawn } from "node:child_process";
+import { ChildProcess, IOType } from "node:child_process";
 import process from "node:process";
 import { Stream } from "node:stream";
 import { ReadBuffer, serializeMessage } from "../shared/stdio.js";
 import { Transport } from "../shared/transport.js";
 import { JSONRPCMessage } from "../types.js";
+import crossSpawn from "cross-spawn";
 
 export type StdioServerParameters = {
   /**
@@ -112,7 +113,7 @@ export class StdioClientTransport implements Transport {
     }
 
     return new Promise((resolve, reject) => {
-      this._process = spawn(
+      this._process = crossSpawn(
         this._serverParams.command,
         this._serverParams.args ?? [],
         {
@@ -124,6 +125,10 @@ export class StdioClientTransport implements Transport {
           cwd: this._serverParams.cwd,
         }
       );
+      if (!this._process) {
+        reject(new Error("Failed to spawn process"));
+        return;
+      }
 
       this._process.on("error", (error) => {
         if (error.name === "AbortError") {
