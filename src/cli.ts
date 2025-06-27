@@ -1,5 +1,18 @@
+/**
+ * Command Line Interface (CLI) for the TypeScript SDK
+ * 
+ * This file provides command-line functionality to run either:
+ * 1. A client that can connect to a server via SSE, WebSocket, or stdio
+ * 2. A server that can accept connections via SSE (with Express) or stdio
+ * 
+ * Usage:
+ *   - Client mode: node cli.js client <server_url_or_command> [args...]
+ *   - Server mode: node cli.js server [port]
+ */
+
 import WebSocket from "ws";
 
+// Polyfill WebSocket for environments where it's not available
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (global as any).WebSocket = WebSocket;
 
@@ -13,6 +26,11 @@ import { SSEServerTransport } from "./server/sse.js";
 import { StdioServerTransport } from "./server/stdio.js";
 import { ListResourcesResultSchema } from "./types.js";
 
+/**
+ * Runs the client with the specified connection details
+ * @param url_or_command - URL for SSE/WebSocket connections, or command for stdio
+ * @param args - Additional arguments when using stdio transport
+ */
 async function runClient(url_or_command: string, args: string[]) {
   const client = new Client(
     {
@@ -57,6 +75,10 @@ async function runClient(url_or_command: string, args: string[]) {
   console.log("Closed.");
 }
 
+/**
+ * Runs the server in either SSE (with Express) or stdio mode
+ * @param port - If provided, runs an Express server for SSE on this port. If null, runs in stdio mode
+ */
 async function runServer(port: number | null) {
   if (port !== null) {
     const app = express();
