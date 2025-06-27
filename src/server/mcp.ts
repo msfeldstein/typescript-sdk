@@ -44,9 +44,25 @@ import { RequestHandlerExtra } from "../shared/protocol.js";
 import { Transport } from "../shared/transport.js";
 
 /**
- * High-level MCP server that provides a simpler API for working with resources, tools, and prompts.
- * For advanced usage (like sending notifications or setting custom request handlers), use the underlying
- * Server instance available via the `server` property.
+ * High-level MCP server module.
+ *
+ * This file defines the `McpServer` class which builds on the lower-level
+ * `Server` implementation to provide a convenient API for registering and
+ * handling tools, resources, and prompts.
+ *
+ * Key responsibilities:
+ * 1. Maintain registries of resources, resource templates, tools, and prompts.
+ * 2. Lazily register request handlers for each feature the first time it is
+ *    used, ensuring the underlying `server` announces the correct
+ *    capabilities.
+ * 3. Perform run-time validation of incoming parameters using Zod schemas and
+ *    convert these schemas to JSON Schema where required.
+ * 4. Surface typed helper methods (`resource`, `tool`, `prompt`) so callers
+ *    can register functionality with minimal boilerplate while retaining full
+ *    type-safety.
+ *
+ * For advanced use-cases you can always interact with the underlying
+ * `Server` instance, exposed via the public `server` property.
  */
 export class McpServer {
   /**
