@@ -1,3 +1,18 @@
+/**
+ * MCP (Model-Client-Protocol) Server Implementation
+ * 
+ * This file implements a high-level server that facilitates communication between models and clients
+ * through a standardized protocol. It provides three main capabilities:
+ * 
+ * 1. Resources: Manages access to both fixed and templated resources through URIs
+ * 2. Tools: Handles registration and execution of tools with optional input validation
+ * 3. Prompts: Manages prompt templates with optional arguments and completion support
+ * 
+ * The server uses Zod for type-safe schema validation and provides a clean API for registering
+ * and managing these capabilities. It handles request routing, argument validation, and error handling
+ * automatically.
+ */
+
 import { Server, ServerOptions } from "./index.js";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import {
