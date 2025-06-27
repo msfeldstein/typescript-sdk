@@ -1,3 +1,12 @@
+// Command-line interface entry point for the MCP TypeScript SDK.
+//
+// This script can operate in two modes:
+// 1. Client mode – `client <server_url_or_command> [args...]`
+//    Connects to an existing MCP server via HTTP(S), WS(S), or spawns a process and communicates over stdio.
+// 2. Server mode – `server [port]`
+//    Starts a local MCP server that communicates over Server-Sent Events (HTTP) when a port is provided,
+//    or over stdio when no port is specified.
+
 import WebSocket from "ws";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
